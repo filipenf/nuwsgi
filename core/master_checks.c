@@ -181,16 +181,16 @@ done:
 }
 
 int uwsgi_master_check_harakiri(int w, int c, int harakiri) {
-	/**
-	 * Triggers a harakiri when the following conditions are met:
-	 * - harakiri timeout > current time
-	 * - listen queue pressure (ie backlog > harakiri_queue_threshold)
-	 *
-	 * The first harakiri attempt on a worker will be graceful if harakiri_graceful_timeout > 0,
-	 * then the worker has harakiri_graceful_timeout seconds to shutdown cleanly, otherwise
-	 * a second harakiri will trigger a SIGKILL
-	 *
-	 */
+/**
+ * Triggers a harakiri when the following conditions are met:
+ * - harakiri timeout > current time
+ * - listen queue pressure (ie backlog > harakiri_queue_threshold)
+ *
+ * The first harakiri attempt on a worker will be graceful if harakiri_graceful_timeout > 0,
+ * then the worker has harakiri_graceful_timeout seconds to shutdown cleanly, otherwise
+ * a second harakiri will trigger a SIGKILL
+ *
+ */
 #ifdef __linux__
 	int backlog = uwsgi.shared->backlog;
 #else
@@ -208,9 +208,9 @@ int uwsgi_master_check_harakiri(int w, int c, int harakiri) {
 
     trigger_harakiri(w);
     if (uwsgi.harakiri_graceful_timeout > 0) {
-        uwsgi.workers[w].cores[c].harakiri = harakiri + uwsgi.harakiri_graceful_timeout;
+        uwsgi.workers[w].harakiri = harakiri + uwsgi.harakiri_graceful_timeout;
         uwsgi_log_verbose("HARAKIRI: graceful termination attempt on worker %d with signal %d. Next harakiri: %d\n",
-                w, uwsgi.harakiri_graceful_signal, uwsgi.workers[w].cores[c].harakiri);
+                w, uwsgi.harakiri_graceful_signal, uwsgi.workers[w].harakiri);
     }
     return 1;
 }
@@ -221,13 +221,13 @@ int uwsgi_master_check_workers_deadline() {
 	for (i = 1; i <= uwsgi.numproc; i++) {
 		for(j=0;j<uwsgi.cores;j++) {
 			/* first check for harakiri */
-			if (uwsgi_master_check_harakiri(i, j, uwsgi.workers[i].cores[j].harakiri)) {
+			if (uwsgi_master_check_harakiri(i, j, uwsgi.workers[i].harakiri)) {
 				uwsgi_log_verbose("HARAKIRI triggered by worker %d core %d !!!\n", i, j);
 				ret = 1;
 				break;
 			}
 			/* then user-defined harakiri */
-			if (uwsgi_master_check_harakiri(i, j, uwsgi.workers[i].cores[j].user_harakiri)) {
+			if (uwsgi_master_check_harakiri(i, j, uwsgi.workers[i].user_harakiri)) {
 				uwsgi_log_verbose("HARAKIRI (user) triggered by worker %d core %d !!!\n", i, j);
 				ret = 1;
 				break;
