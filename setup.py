@@ -115,14 +115,14 @@ class uWSGIDistribution(Distribution):
 
 
 setup(
-    name='uWSGI',
+    name='nuwsgi',
     version=uc.uwsgi_version,
-    description='The uWSGI server',
-    author='Unbit',
-    author_email='info@unbit.it',
+    description='Fork of the official uWSGI server',
+    author='Filipe Felisbino',
+    author_email='filipenf@gmail.com',
     license='GPLv2+',
-    descriptions='The uWSGI Platform',
-    url='https://uwsgi-docs.readthedocs.io/en/latest/',
+    descriptions='Fork of uwsgi with extended harakiri options',
+    url='https://github.com/filipenf/uwsgi',
     py_modules=['uwsgidecorators'],
     distclass=uWSGIDistribution,
     classifiers=[
