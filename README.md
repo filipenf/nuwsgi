@@ -51,7 +51,7 @@ $ uwsgi --master --http :8080 --harakiri 1 \
 ```
 ## Installation:
 
-pip install nuwsgi=2.0.19.1
+pip install nuwsgi==2.0.19.2
 
 Despite the different package name, the binary name is the same so you can use
 `uwsgi` as usual. 
